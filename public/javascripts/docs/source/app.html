@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">&#39;use strict&#39;;
+
+<span id='global-method-xmlHttpRequest'>/**
+</span> * Reusable and customisable AJAX function
+ *
+ * @param { string } method  - The HTTP method
+ * @param { string } request - The request URI address
+ * @param { object } data - The data to be sent to the server
+ * @param { function } callback - The callback function
+ * @param { boolean } formHeader - If the request is to be www-form-urlencoded (true) or JSON encoded (false)
+ */
+function xmlHttpRequest (method, request, data, callback, formHeader) {
+    (function () {
+        var xmlHttp = new XMLHttpRequest();
+
+        xmlHttp.onreadystatechange = function () {
+            if (xmlHttp.readyState === 4) {
+                if (xmlHttp.status === 200) {
+                    callback(xmlHttp.responseText);
+                }
+            }
+        };
+
+        xmlHttp.open(method, request, true);
+        if (formHeader === true) {
+            // PHP is terrible at dealing with JSON :(
+            xmlHttp.setRequestHeader(&#39;Content-type&#39;, &#39;application/x-www-form-urlencoded&#39;);
+        } else {
+            xmlHttp.setRequestHeader(&#39;Content-Type&#39;, &#39;application/json; charset=UTF-8&#39;);
+        }
+
+        if (method.toUpperCase() === &#39;POST&#39; || method.toUpperCase() === &#39;PUT&#39;) {
+            xmlHttp.send(data);
+        } else {
+            xmlHttp.send();
+        }
+    })();
+}
+
+<span id='global-method-footballApi'>/**
+</span> * API for collecting the required info about each football team
+ *
+ * @param { string } request - The request URI address
+ * @param { function } callback - the callback function
+ */
+function footballApi (request, callback) {
+    (function () {
+        var xmlHttp = new XMLHttpRequest(),
+            response;
+
+        xmlHttp.onreadystatechange = function () {
+            if (xmlHttp.readyState === 4) {
+                if (xmlHttp.status === 200) {
+                    response = xmlHttp.responseText;
+                    response = JSON.parse(response);
+                    //response = JSON.stringify(response);
+                    callback(response);
+                }
+            }
+        };
+
+        xmlHttp.open(&#39;GET&#39;, request, true);
+        xmlHttp.setRequestHeader(&#39;X-Auth-Token&#39;, &#39;7d9053ce70c443a597776ab040f6e389&#39;);
+        xmlHttp.send();
+    })();
+}
+
+<span id='global-method-renderArray'>/**
+</span> * Populates the teams, cities and regions lists
+ *
+ * @param { string } parentPage - The page where item was selected
+ * @param { string } target - The target element for element and data rendering
+ * @param { array } namesArr - The array of titles
+ * @param { array } imagesArr - The array of images
+ */
+function renderArray (parentPage, target, namesArr, imagesArr) {
+    (function () {
+        for (var i = 0; i &lt; namesArr.length; i++) {
+            var column = document.createElement(&#39;div&#39;),
+                img    = document.createElement(&#39;img&#39;),
+                link   = document.createElement(&#39;a&#39;);
+
+            column.setAttribute(&#39;class&#39;, &#39;three columns each&#39;);
+            img.setAttribute(&#39;src&#39;, &#39;./server/images/&#39; + imagesArr[i]);
+            link.setAttribute(&#39;href&#39;, &#39;#/&#39; + parentPage + &#39;/&#39; + namesArr[i].replace(/[\. ,:-]+/g, &#39;-&#39;));
+            link.innerText = namesArr[i];
+            target.appendChild(column).appendChild(link).appendChild(img);
+        }
+    })();
+}
+
+<span id='global-method-renderTeam'>/**
+</span> * Populate DOM with data of teams
+ *
+ * @param { object } data - team specific data set
+ * @param { function } callback - The callback function
+ */
+function renderTeam (data, callback) {
+    (function () {
+        var target            = document.getElementById(&#39;a-teams-list&#39;),
+            main_image        = document.getElementById(&#39;main-image&#39;),
+            other_team_images = document.getElementById(&#39;other-team-images&#39;),
+            team_details      = document.getElementById(&#39;team-details&#39;),
+            team_name         = document.getElementById(&#39;team-name&#39;),
+            stadium_name      = document.getElementById(&#39;stadium-name&#39;),
+            team_location     = document.getElementById(&#39;team-location&#39;),
+            location_details  = document.getElementById(&#39;location-details&#39;),
+            images            = [],
+            image,
+            i;
+
+        // Add team badge
+        if (data.badge) {
+            images.push(data.badge);
+        }
+
+        // Build array of all acc. images
+        for (i = 0; i &lt; data.images.length; i++) {
+            images.push(data.images[i].url);
+        }
+
+        // Build html elements
+        for (i = 0; i &lt; images.length; i++) {
+            image = document.createElement(&#39;img&#39;);
+
+            if (i === 1) {
+                image.setAttribute(&#39;src&#39;, &#39;./server/images/&#39; + images[1]);
+                main_image.appendChild(image);
+            } else {
+                image.setAttribute(&#39;src&#39;, &#39;./server/images/&#39; + images[i]);
+                other_team_images.appendChild(image);
+            }
+        }
+
+        // Set details
+        team_name.textContent = data.team_name;
+        stadium_name.textContent = &#39;Stadium: &#39; + data.stadium;
+
+        callback();
+    })();
+}
+
+<span id='global-method-renderCity'>/**
+</span> * Populate DOM with data of a specific city
+ *
+ * @param { object } data - city specific data set
+ * @param { function } callback - The callback function
+ */
+function renderCity (data, callback) {
+    (function () {
+        var target            = document.getElementById(&#39;a-cities-list&#39;),
+            main_image        = document.getElementById(&#39;main-image&#39;),
+            other_city_images = document.getElementById(&#39;other-city-images&#39;),
+            city_images       = document.getElementById(&#39;city-images&#39;),
+            city_name         = document.getElementById(&#39;city-name&#39;),
+            images            = [],
+            image,
+            city_teams_list,
+            city_teams_team,
+            i;
+
+        // Build array of images
+        for (i = 0; i &lt; data.images.length; i++) {
+            images.push(data.images[i].url);
+        }
+
+        // Build html elements
+        for (i = 0; i &lt; images.length; i++) {
+            image = document.createElement(&#39;img&#39;);
+
+            if (i === 1) {
+                image.setAttribute(&#39;src&#39;, &#39;./server/images/&#39; + images[1]);
+                main_image.appendChild(image);
+            } else {
+                image.setAttribute(&#39;src&#39;, &#39;./server/images/&#39; + images[i]);
+                other_city_images.appendChild(image);
+            }
+        }
+
+        // Set details
+        city_name.textContent = data.city_name;
+
+        callback();
+    })();
+}
+
+<span id='global-method-renderRegion'>/**
+</span> * Populate DOM with data of specific region
+ *
+ * @param { object } data - region specific data set
+ * @param { function } callback - The callback function
+ */
+function renderRegion (data, callback) {
+    (function () {
+        var target              = document.getElementById(&#39;a-region-list&#39;),
+            main_image          = document.getElementById(&#39;main-image&#39;),
+            other_region_images = document.getElementById(&#39;other-region-images&#39;),
+            region_name         = document.getElementById(&#39;region-name&#39;),
+            region_images       = document.getElementById(&#39;region-images&#39;),
+            images              = [],
+            image,
+            region_teams_list,
+            region_teams_team,
+            i;
+
+        // Build array of images
+        for (i = 0; i &lt; data.images.length; i++) {
+            images.push(data.images[i].url);
+        }
+
+        // Build html elements
+        for (i = 0; i &lt; images.length; i++) {
+            image = document.createElement(&#39;img&#39;);
+
+            if (i === 1) {
+                image.setAttribute(&#39;src&#39;, &#39;./server/images/&#39; + images[1]);
+                main_image.appendChild(image);
+            } else {
+                image.setAttribute(&#39;src&#39;, &#39;./server/images/&#39; + images[i]);
+                other_region_images.appendChild(image);
+            }
+        }
+
+        region_name.textContent = data.region_name;
+
+        callback();
+    })();
+}
+
+<span id='global-method-menuController'>/**
+</span> * Sets the active element of the menu per page
+ *
+ * @param { float } target - Selected menu item id
+ */
+function menuController (target) {
+    (function () {
+        var menu = document.getElementById(&#39;main-menu&#39;).getElementsByTagName(&#39;li&#39;);
+
+        switch (target) {
+            case 0:
+                clearMenu();
+                menu[0].className = &#39;menu-active&#39;;
+
+                break;
+            case 1:
+                clearMenu();
+                menu[1].className = &#39;menu-active&#39;;
+
+                break;
+
+            case 2:
+                clearMenu();
+                menu[2].className = &#39;menu-active&#39;;
+
+                break;
+
+            case 3:
+                clearMenu();
+                menu[3].className = &#39;menu-active&#39;;
+
+                break;
+            default:
+                console.log(&#39;No menu item&#39;);
+
+                break;
+        }
+
+        function clearMenu () {
+            for (var i = 0; i &lt; menu.length; i++) {
+                menu[i].className = &#39;&#39;;
+            }
+        }
+    })();
+}
+
+<span id='global-method-'>/**
+</span> * Search controller
+ *
+ * @param null
+ */
+(function () {
+    var search_container     = document.getElementById(&#39;search&#39;),
+        body_fade            = document.getElementById(&#39;body-fade&#39;),
+        search_form          = document.getElementById(&#39;search-form&#39;),
+        search_input         = document.getElementById(&#39;search-input&#39;),
+        search_open          = document.getElementById(&#39;search-open&#39;),
+        search_close         = document.getElementById(&#39;search-close&#39;),
+        search_submit        = document.getElementById(&#39;search-submit&#39;),
+        search_buttons_group = document.getElementById(&#39;search-buttons-group&#39;),
+        page                 = &#39;team&#39;,
+        selection;
+
+    search_open.onclick = function () {
+        body_fade.classList.remove(&#39;closed&#39;);
+        body_fade.classList.add(&#39;open&#39;);
+
+        search_container.classList.remove(&#39;menu-fade-out&#39;);
+        search_container.classList.add(&#39;menu-fade-in&#39;);
+
+        search_container.classList.remove(&#39;closed&#39;);
+        search_container.classList.add(&#39;open&#39;);
+    };
+
+    search_close.onclick = function () {
+        body_fade.classList.remove(&#39;open&#39;);
+        body_fade.classList.add(&#39;closed&#39;);
+
+        search_container.classList.remove(&#39;menu-fade-in&#39;);
+        search_container.classList.add(&#39;menu-fade-out&#39;);
+
+        search_container.classList.remove(&#39;open&#39;);
+        setTimeout(function () {
+            search_container.classList.add(&#39;closed&#39;);
+        }, 300);
+    };
+
+    // For the buttons
+    search_buttons_group.addEventListener(&#39;click&#39;, function (event) {
+        selection = event.target.textContent.toLowerCase();
+
+        if (selection === &#39;city&#39; || selection === &#39;team&#39; || selection === &#39;region&#39;) {
+            page = selection;
+
+            // Clear colours
+            for (var i = 0; i &lt; 3; i++) {
+                search_buttons_group.getElementsByTagName(&#39;button&#39;)[i].setAttribute(&#39;style&#39;, &#39;background: white; color: #333333&#39;);
+            }
+
+            // Set clicked button colours
+            event.target.setAttribute(&#39;style&#39;, &#39;background: #03A9F4; color: white&#39;);
+        }
+    }, false);
+
+    search_form.addEventListener(&#39;submit&#39;, function (event) {
+        event.preventDefault();
+        searchSubmit();
+    }, false);
+
+    search_submit.addEventListener(&#39;click&#39;, function (event) {
+        event.preventDefault();
+        searchSubmit();
+    }, false);
+
+    function searchSubmit () {
+        search(page, &#39;Bercelona&#39;);
+    }
+})();
+
+<span id='global-method-search'>/**
+</span> * Search method
+ *
+ * @param { string } page - The page of search
+ * @param { string } searchTerm - The value to be used to search the server
+ */
+function search (page, searchTerm) {
+    (function () {
+        var response_data,
+            data = &#39;group=&#39; + page + &#39;&amp;term=&#39; + searchTerm;
+
+        xmlHttpRequest(&#39;POST&#39;, &#39;./server/search.php&#39;, data, function (response) {
+            //response_data = JSON.parse(response);
+            console.log(response);
+        }, true);
+    })();
+}
+
+<span id='global-method-isNullOrWhitespace'>/**
+</span> * Check if value is null or empty
+ *
+ * @param { string } value - The value to be checked
+ */
+function isNullOrWhitespace (value) {
+    (function () {
+        return !(!value || !value.trim());
+    })();
+}</pre>
+</body>
+</html>

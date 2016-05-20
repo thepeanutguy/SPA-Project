@@ -1,0 +1,15 @@
+.global-header {
+    padding: 20px 0;
+    background: $deep-blue;
+    color: $white;
+
+    h1 {
+        text-align: center;
+        margin: 0;
+    }
+    
+    img {
+        width: 100%;
+        display: block;
+    }
+}

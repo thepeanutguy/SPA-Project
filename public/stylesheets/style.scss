@@ -1,0 +1,14 @@
+// General
+@import './scss/colour';
+@import './scss/all';
+@import './scss/animation';
+
+// Page Unspecific
+@import './scss/unspecific/global-header';
+@import './scss/unspecific/main-menu';
+@import './scss/unspecific/search';
+
+// Page Specific
+@import './scss/specific/home';
+@import './scss/specific/teams-cities-regions';
+@import './scss/specific/team-city-region';

@@ -1,0 +1,100 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>La Liga</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="./public/images/favicon.png">
+    <link rel="apple-touch-icon" href="./public/images/apple-touch-icon.png">
+    <link rel="mask-icon" href="./public/images/icon.svg">
+    
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" href="./public/stylesheets/vendor/normalize.css">
+    <link rel="stylesheet" href="./public/stylesheets/vendor/skeleton.css">
+    <link rel="stylesheet" href="./public/stylesheets/vendor/leaflet.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./public/stylesheets/style.css">
+</head>
+<body>
+    
+    <div id="body-fade" class="body-fade closed"></div>
+    
+    <div class="global-header">
+        <h1 id="header">La Liga</h1>
+    </div>
+    
+    <menu class="main-menu" id="main-menu">
+        <div class="container">            
+            <nav class="row">
+                <ul class="">
+                    <li><a href="#/">Home</a></li>
+                    <li><a href="#/teams">Teams</a></li>
+                    <li><a href="#/cities">Cities</a></li>
+                    <li><a href="#/regions">Regions</a></li>
+                </ul>
+            </nav>
+        </div>
+    </menu>
+    
+    <div class="container search">
+        <div class="row">
+            <span id="search-open"><i class="fa fa-search search-icon" aria-hidden="true"> Search</i></span>
+        </div>
+    </div>
+    
+    <div class="search-form-container menu-fade-in closed" id="search">
+        <header>
+            <p><i class="fa fa-search search-icon" aria-hidden="true">&nbsp;&nbsp; Search</i></p>
+            <i id="search-close" class="fa fa-times close" aria-hidden="true"> Close</i>
+        </header>
+        
+        <div class="search-form-border">
+            <form id="search-form" class="search-form" action="#" method="#">
+                <label for="">What are you looking for?</label>
+                <div id="search-buttons-group" class="search-buttons-group">
+                    <button class="button-active search-button" type="button" name="button">Team</button>
+                    <button class="search-button" type="button" name="button">City</button>
+                    <button class="search-button" type="button" name="button">Region</button>
+                </div>
+                
+                <label for="">
+                    Enter search term here <br>
+                    <input id="search-input" class="search-term" type="text" name="search-term" value="" placeholder="Searching for...">
+                </label>
+                
+                <button id="search-submit" class="search-submit" type="button" name="button">Submit</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="application-root">
+    </div>
+    
+    <script type="text/javascript" id="script-root">
+    </script>
+    
+    <!-- Vendor JavaScript -->
+    <script type="text/javascript" src="./public/javascripts/vendor/signals.js"></script>
+    <script type="text/javascript" src="./public/javascripts/vendor/crossroads.js"></script>
+    <script type="text/javascript" src="./public/javascripts/vendor/hasher.js"></script>
+    <script type="text/javascript" src="./public/javascripts/vendor/Chart.js"></script>
+    <script type="text/javascript" src="./public/javascripts/vendor/leaflet.js"></script>
+    <script type="text/javascript" src="./public/javascripts/vendor/lunr.js"></script>
+    
+    <!-- Application Library / Logic -->
+    <script type="text/javascript" src="./public/javascripts/app.js"></script>
+    
+    <!-- Custom Routing -->
+    <script type="text/javascript" src="./public/javascripts/routing.js"></script>
+
+</body>
+</html>

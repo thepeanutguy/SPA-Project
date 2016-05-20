@@ -1,0 +1,75 @@
+@-webkit-keyframes fadeIn { from { opacity: 0; margin-left: -20px; } to { opacity: 1; margin-left: 0; } }
+@-moz-keyframes fadeIn { from { opacity: 0; margin-left: -20px; } to { opacity: 1; margin-left: 0; } }
+@keyframes fadeIn { 
+    from { 
+        opacity: 0; 
+        margin-left: -20px; 
+    } to { 
+        opacity: 1; 
+        margin-left: 0; 
+    } 
+}
+
+@-webkit-keyframes menuFadeIn { from { opacity: 0; margin: -200px auto 0; } to { opacity: 1; margin: 0 auto; } }
+@-moz-keyframes menuFadeIn { from { opacity: 0; margin: -200px auto 0; } to { opacity: 1; margin: 0 auto; } }
+@keyframes menuFadeIn { 
+    from { 
+        opacity: 0; 
+        margin: -200px auto 0; 
+    } to { 
+        opacity: 1; 
+        margin: 0 auto; 
+    } 
+}
+
+@-webkit-keyframes menuFadeout { from { opacity: 1; margin: 0 auto; } to { opacity: 0; margin: 0 auto; margin-top: -500px; display: none } }
+@-moz-keyframes menuFadeout { from { opacity: 1; margin: 0 auto; } to { opacity: 0; margin: 0 auto; margin-top: -500px; display: none } }
+@keyframes menuFadeout { 
+    from { 
+        opacity: 1; 
+        margin: 0 auto; 
+    } to { 
+        opacity: 0; 
+        margin: 0 auto; 
+        margin-top: -500px; 
+        display: none; 
+    } 
+}
+
+.fade-in {
+    -webkit-animation: fadeIn ease-out 1;
+    -moz-animation: fadeIn ease-out 1;
+    animation: fadeIn ease-out 1;
+    -webkit-animation-fill-mode: forward;
+    -moz-animation-fill-mode: forward;
+    animation-fill-mode: forward;
+    -webkit-animation-duration: 0.4s;
+    -moz-animation-duration: 0.4s;
+    animation-duration: 0.4s;
+}
+
+.menu-fade-in {
+    margin: 0 auto;
+    -webkit-animation: menuFadeIn ease 1;
+    -moz-animation: menuFadeIn ease 1;
+    animation: menuFadeIn ease 1;
+    -webkit-animation-fill-mode: forward;
+    -moz-animation-fill-mode: forward;
+    animation-fill-mode: forward;
+    -webkit-animation-duration: 0.4s;
+    -moz-animation-duration: 0.4s;
+    animation-duration: 0.4s;
+}
+
+.menu-fade-out {
+    margin: 0 auto;
+    -webkit-animation: menuFadeout ease-in 1;
+    -moz-animation: menuFadeout ease-in 1;
+    animation: menuFadeout ease-in 1;
+    -webkit-animation-fill-mode: forward;
+    -moz-animation-fill-mode: forward;
+    animation-fill-mode: forward;
+    -webkit-animation-duration: 0.3s;
+    -moz-animation-duration: 0.3s;
+    animation-duration: 0.3s;
+}
